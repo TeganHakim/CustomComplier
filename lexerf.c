@@ -7,15 +7,25 @@
 
 void print_token(Token token) {
     printf("TOKEN VALUE:");
+    printf("'");
     for (int i = 0; token.value[i] != '\0'; i++) {
         printf("%c", token.value[i]);
     }
-    if (token.type == INT) {
-        printf(" TOKEN TYPE: INT\n");
-    } else if (token.type == KEYWORD) {
-        printf(" TOKEN TYPE: KEYWORD\n");
-    } else if (token.type == SEPARATOR) {
-        printf(" TOKEN TYPE: SEPARATOR\n");
+    printf("'");
+
+    switch(token.type) {
+        case INT:
+            printf(" TOKEN TYPE: INT\n");
+            break;
+        case KEYWORD:
+            printf(" TOKEN TYPE: KEYWORD\n");
+            break;
+        case SEPARATOR:
+            printf(" TOKEN TYPE: SEPARATOR\n");
+            break;
+        case END_OF_TOKENS:
+            printf(" END_OF_TOKENS\n");
+            break;
     }
 }
 
@@ -54,6 +64,15 @@ Token *generate_keyword(char *current, int *current_index) {
     return token;
 }
 
+Token *generate_separator(char *current, int *current_index) {
+    Token *token = malloc(sizeof(Token));
+    token->value = malloc(sizeof(char) * 2);
+    token->value[0] = current[*current_index];
+    token->value[1] = '\0';
+    token->type = SEPARATOR;
+    return token;
+}
+
 size_t tokens_index;
 
 Token *lexer(FILE *file) {
@@ -85,27 +104,15 @@ Token *lexer(FILE *file) {
             tokens = realloc(tokens, sizeof(Token) * number_of_tokens);
         }
         if (current[current_index] == ';') {
-            char *value = malloc(sizeof(char) * 2);
-            value[0] = current[current_index];
-            value[1] = '\0';
-            token->value = value;
-            token->type = SEPARATOR;
+            token = generate_separator(current, &current_index);
             tokens[tokens_index] = *token;
             tokens_index++;
         } else if (current[current_index] == '(') {
-            char *value = malloc(sizeof(char) * 2);
-            value[0] = current[current_index];
-            value[1] = '\0';
-            token->value = value;
-            token->type = SEPARATOR;
+            token = generate_separator(current, &current_index);
             tokens[tokens_index] = *token;
             tokens_index++;
         } else if (current[current_index] == ')') {
-            char *value = malloc(sizeof(char) * 2);
-            value[0] = current[current_index];
-            value[1] = '\0';
-            token->value = value;
-            token->type = SEPARATOR;
+            token = generate_separator(current, &current_index);
             tokens[tokens_index] = *token;
             tokens_index++;
         } else if (isdigit(current[current_index])) {
@@ -118,8 +125,10 @@ Token *lexer(FILE *file) {
             tokens[tokens_index] = *token;
             tokens_index++;
             current_index--;
+        } else if (current[current_index] == ' ' || current[current_index] == '\t') {
+            continue;
         } else {
-            printf("ERROR: UNEXPECTED CHARACTER\n");
+            printf("UNKNOWN CHARACTER: %c\n", current[current_index]);
             exit(1);
         }
         free(token);
