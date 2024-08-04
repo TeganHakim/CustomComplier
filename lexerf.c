@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "lexerf.h"
 
@@ -25,6 +25,9 @@ void print_token(Token token) {
             break;
         case END_OF_TOKENS:
             printf(" END_OF_TOKENS\n");
+            break;
+        case BEGINNING:
+            printf(" BEGINNING\n");
             break;
     }
 }

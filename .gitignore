@@ -1,1 +1,5 @@
 .vscode/*
+build/main.exe
+generated.asm
+generated.exe
+generated.obj

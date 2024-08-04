@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <ctype.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "lexerf.h"
 #include "parserf.h"
-
+#include "codegeneratorf.h"
 
 int main(int argc, char *argv[]) {
     if (argc < 2) {
@@ -27,5 +27,13 @@ int main(int argc, char *argv[]) {
        print_token(tokens[i]);
     }
 
-    Token *tokens2 = parser(tokens);
+    Node *parsed = parser(tokens);
+
+    generate_code(parsed);
+    FILE *assembly_file = fopen("generated.asm", "r");
+    if (!assembly_file) {
+        printf("Error: Assembly file not found\n");
+        exit(1);
+    }
+    system("sh buildasm.sh");
 }
