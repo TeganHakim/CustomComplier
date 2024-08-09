@@ -1,20 +1,10 @@
-# OpenC programming language  and compiler
+# Custom programming language compiler built using C.
 
-A custom programming language compiler that is build using C.  
+**This is a proof of concept and is not fully functioning.** Only lexerizes and parses text... does not generate assembly code. 
 
-OpenC features:
-- variables
-- arithmetic operations
-- loops
-- conditionals
-- writing to console
-
-Compiler features:
+Features:
 - Lexer
 - Parser (AST)
-- Code Generator
-
-Quick Start:
 
 Dependencies: gcc
 ```
